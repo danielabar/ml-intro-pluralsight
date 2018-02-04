@@ -92,7 +92,7 @@ Role combines:
 
 ML also referred to as *Predictive Analytics*.
 
-![vendor](images/vendor.png "vendor")
+![vendors](images/vendors.png "vendors")
 
 ### The Role of R
 
