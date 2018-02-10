@@ -15,8 +15,14 @@
   - [The ML Process](#the-ml-process)
     - [Asking the Right Question](#asking-the-right-question)
     - [Illustrating the ML Process](#illustrating-the-ml-process)
-    - [Scenario: Detecting Credit Card Fraud](#scenario-detecting-credit-card-fraud)
-    - [Scenario: Predicting Customer Churn](#scenario-predicting-customer-churn)
+    - [Example Machine Learning Scenarios](#example-machine-learning-scenarios)
+  - [A Closer Look at the ML Process](#a-closer-look-at-the-ml-process)
+    - [Terminology](#terminology)
+    - [Data Pre-processing](#data-pre-processing)
+    - [Categorizing Machine Learning Problems](#categorizing-machine-learning-problems)
+    - [Styles of Machine Learning Algorithms](#styles-of-machine-learning-algorithms)
+    - [Training and Testing a Model](#training-and-testing-a-model)
+    - [Using a Model](#using-a-model)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -131,14 +137,16 @@ Entire process must be repeated, model must be recreated regularly, to keep mode
 
 ![repeat](images/repeat.png "repeat")
 
-### Scenario: Detecting Credit Card Fraud
+### Example Machine Learning Scenarios
+
+**Scenario: Detecting Credit Card Fraud**
 
 ![scenario-cc-fraud](images/scenario-cc-fraud.png "scenario-cc-fraud")
 
 - Given cc customers supplying their payment info to payment application (eg: POS terminal at grocery store). Which should app reject because they're likely fraudulent?
 - Start with historical transaction data, run through ML process to get model that app can call to make decision.
 
-### Scenario: Predicting Customer Churn
+**Scenario: Predicting Customer Churn**
 
 ![customer-churn](images/customer-churn.png "customer-churn")
 
@@ -146,6 +154,117 @@ Entire process must be repeated, model must be recreated regularly, to keep mode
 - Call center staff use Call Center App.
 - For each caller, want staff to know, how likely is that customer to switch to a competitor.
 - Staff can offer customers who are about to switch a better deal than a loyal customer.
-- Mobile phone company may have large volume of detailed call data on their customers. They could use an app to aggregate it (eg: Hadoop, Spark), then combine this data with other data such as CRM system. Then the resulting data combined from multiple sources can be fed into the ML process.
+- Mobile phone company may have large volume of detailed call data on their customers. They could use an app to aggregate it (eg: Hadoop, Spark), then combine this data with other data such as CRM system. Then the resulting data combined from multiple sources can be fed into the ML process to produce a model, that call center app can thenuse to predict likelihood of customer leaving.
 
-2:48 https://app.pluralsight.com/player?course=understanding-machine-learning&author=david-chappell&name=understanding-machine-learning-m3&clip=3&mode=live
+ML commonly used together with other data technologies.
+
+**Scenario: Predicting Equipment Failure**
+
+![scenario-equip-failure](images/scenario-equip-failure.png "scenario-equip-failure")
+
+- Devices (eg: thermostats,robots in a factory etc) that generate streaming data handled by real-time data processing software.
+- Software looking for anomalies/patterns that predict failure.
+- When potential failure found, software contacts notifier app that notifies business users to take action.
+- How doe sreal-time data processing software know what to look for? Could have historical database devices have produced already.
+- Historical data used as input to ML to create model that real-time processing can use.
+
+## A Closer Look at the ML Process
+
+### Terminology
+
+**Training Data:**
+Prepared data used to create a model. Because creating a model is called training a model.
+
+Two categories of ML:
+
+**1. Supervised Learning:**
+Value you want to predict is in the training data. eg: predicting cc fraud - whether or not a given transaction was fraudulent is already a populated field in each record in the training data. The data is *labeled*.
+
+**2. Unsupervised Learning**
+Value you want to predict is NOT in the training data. The data is *unlabeled*.
+
+Supervised learning is the more common approach.
+
+### Data Pre-processing
+
+ML starts with data. Could be from a relational, nosql, binary etc. This is *raw data*.
+Raw data needs to be read into *Data Preprocessing Module(s)* (typically chosen ML technology provides this).
+Preprocessing required because raw data is rarely in the right shape to be procesed by ML algorithms.
+
+Raw data could have missing values, be redundant, have dupes, might contain some info that is not predictive (i.e. won't help to create a good model).
+
+Output of preprocessing step is *Training Data*. Training data typically has columns, these are called *Features*.
+Eg: in cc fraud scenario, data contained fields such as country of issue, country of use, these are all features.
+
+In supervised learning, the value you want to predict is in the training data, (eg: cc fraud - whether transaction was fraudulent). This is called the *Target Value*.
+
+![data-preprocessing](images/data-preprocessing.png "data-preprocessing")
+
+### Categorizing Machine Learning Problems
+
+3 of the most used:
+
+**Regression**
+
+![regression](images/regression.png "regression")
+
+Problem: Have data, would like to find a line/curve that best fits the data. Regression problems are typically supervised learning scenarios. For example, given some historical sales data, business would ask "How many units of thisproduct will we sell next month?"
+
+**Classification**
+
+![classification](images/classification.png "classification")
+
+Problem: Have data, want to group it into at least two or more *classes*. When new data comes in, want to determine which class that data belongs to. Commonly used with supervised learning. Eg: Is this cc transaction fraudulent? i.e. does a new transaction belong in the "fraudulent" or "not fraudulent" class? Response will not be yes/no, but a probability of which class new transaction might be in.
+
+**Clustering**
+
+![clustering](images/clustering.png "clustering")
+
+Problem: Have data, want to find clusters within the data. Used with unsupervised learning. Data is not labelled, don't know exactly what you're looking for. Eg: What are our customer segments?
+
+### Styles of Machine Learning Algorithms
+
+- Decision tree
+- Neural network (somewhat how brain works)
+- Bayesian (use Bayes theorem to calculate probabilities)
+- K-means (for clustering)
+- more...
+
+![algorithms](images/algorithms.png "algorithms")
+
+### Training and Testing a Model
+
+**Training**
+
+![training-model](images/training-model.png "training-model")
+
+- Start with training data (supervised learning).
+- Choose *features* that are most predictive of the *target value*.
+- Input training data into chosen learning algorithm, but only send in 75% of data, not the whole thing.
+- Training data could have lots of features, even hundreds - how to choose which features are predictive and how many should be used? Data scientists are concerned with these difficult problems.
+- Generate candidate model
+- Determine if model is any good - testing...
+
+**Testing**
+
+- Input test data (remaining 25% that was held back in training) into candidate model.
+- Candidate model generates target values from test data.
+- You know what the target values *should* be because they're in the training data.
+- Compare target values produced by candidate model from test data to the real target values in the training data.
+
+**Improving Model**
+
+Suppose testing reveals candidate model not very predictive. Can be improved by:
+
+- Choose different features.
+- Get new or more data.
+- Modify parameters in algorithm or choose a different algorithm
+- Iterate - aka trial and error
+
+Note even though process is called "Machine Learning", there are many human decisions involved such as what features to use, algorithms, parameters etc.
+
+### Using a Model
+
+![training-model](images/training-model.png "training-model")
+
+Application can call model providing values for features required by model.
