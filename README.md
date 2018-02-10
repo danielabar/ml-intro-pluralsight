@@ -265,6 +265,6 @@ Note even though process is called "Machine Learning", there are many human deci
 
 ### Using a Model
 
-![training-model](images/training-model.png "training-model")
+![use-model](images/use-model.png "use-model")
 
 Application can call model providing values for features required by model.
